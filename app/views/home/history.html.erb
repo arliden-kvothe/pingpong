@@ -1,0 +1,27 @@
+<h1 class='page-header'>History</h1>
+
+<p id="alert alert-success" role="alert"><%= flash[:message] %></p>
+
+<table class="table">
+  <tr>
+    <th>Date</th>
+    <th>Opponent</th>
+    <th>Score</th>
+    <th>Result</th>
+  </tr>
+ 
+  <% Log.where('user_id = ?', current_user.id).order(date_played: :desc).each do |log| %>
+    <tr>
+      <td><%= log.date_played.strftime("%b %e, %Y") %></td>
+      <td><%= User.find(log.opponent_id).email %></td>
+      <td><%= log.your_score.to_s + '-' + log.their_score.to_s%> </td>
+      <% if log.your_score > log.their_score %>
+        <td>W</td>
+      <% elsif log.your_score < log.their_score %>
+        <td>L</td>
+      <% else %>
+        <td>T</td>
+      <% end %>
+    </tr>
+  <% end %>
+</table>

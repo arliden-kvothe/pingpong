@@ -1,0 +1,22 @@
+<h1 class='page-header'>Leaderboard</h1>
+
+<p id="alert alert-success" role="alert"><%= flash[:message] %></p>
+
+<table class="table">
+  <tr>
+    <th>Rank</th>
+    <th>Name</th>
+    <th>Score</th>
+    <th>Games Played</th>
+  </tr>
+ 
+  <% Log.select("user_id as user_id, sum(your_score) as score, count(id) as games ").group("user_id").order("score").each_with_index do |log, index| %>
+    <tr>
+      <td># <%= index + 1 %></td>
+      <td><%= User.find(log.user_id).email %></td>
+      <td><%= log.score %></td>
+      <td><%= log.games %></td>
+    </tr>
+  <% end %>
+</table>
+

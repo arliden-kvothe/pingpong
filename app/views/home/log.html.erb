@@ -1,0 +1,48 @@
+<h1 class='page-header'>Log Game</h1>
+
+<div class="panel panel-default">
+  <div class="panel-body">
+  <%= form_for :log, url: log_create_url do |f| %>
+    
+    <% if @log.errors.any? %>
+      <div style="padding-top: 0px" class="alert alert-danger" id="error_explanation">
+        <h3>
+          <%= pluralize(@log.errors.count, "error") %> prohibited
+          this log from being saved:
+        </h3>
+        <ul>
+          <% @log.errors.full_messages.each do |msg| %>
+            <li><%= msg %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <%= f.hidden_field :user_id, :value => current_user.id %>
+    <p>
+      <%= f.label :date_played %><br>
+      <%= f.date_select :date_played, :include_blank => true, :order => [:day, :month, :year], class: 'form-control' %>
+    </p>
+   
+    <p>
+      <%= f.label :opponent_id %><br>
+      <%= f.collection_select(:opponent_id, User.where('id NOT IN (?)', current_user.id), :id, :email) %>
+    </p>
+
+    <p>
+      <%= f.label :your_score %><br>
+      <%= f.number_field :your_score, min: 0 %>
+    </p>
+
+    <p>
+      <%= f.label :their_score %><br>
+      <%= f.number_field :their_score, min: 0 %>
+    </p>
+   
+    <p>
+      <%= f.submit 'Save', :class => 'btn btn-primary' %>
+      <%= link_to 'Cancel', history_path, :class => 'btn btn-default' %>
+    </p>
+  <% end %>
+  </div>
+</div>
